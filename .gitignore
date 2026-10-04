@@ -1,15 +1,4 @@
-st
+*.o
 config.h
 patches.h
-*.o
-*.rej
-*.orig
-
-
-# Beads / Dolt files (added by bd init)
-.dolt/
-*.db
-.beads-credential-key
-.beads/proxieddb/
-*.gate.lock*
-.worktrees/
+st

@@ -32,8 +32,8 @@ clean:
 dist: clean
 	mkdir -p st-$(VERSION)
 	cp -R FAQ LEGACY TODO LICENSE Makefile README config.mk\
-		config.def.h patches.def.h st.info st.1 arg.h st.h win.h $(LIGATURES_H) $(SRC)\
-
+		config.def.h st.info st.1 arg.h st.h win.h $(LIGATURES_H) $(SRC)\
+		st-$(VERSION)
 	tar -cf - st-$(VERSION) | gzip > st-$(VERSION).tar.gz
 	rm -rf st-$(VERSION)
 
@@ -46,7 +46,7 @@ install: st
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/st.1
 	tic -sx st.info
 	mkdir -p $(DESTDIR)$(PREFIX)/share/applications # desktop-entry patch
-	test -f ${DESTDIR}${PREFIX}/share/applications/st.desktop || cp -n st.desktop $(DESTDIR)$(PREFIX)/share/applications # desktop-entry patch
+	test -f ${DESTDIR}${PREFIX}/share/applications/st.desktop || cp st.desktop $(DESTDIR)$(PREFIX)/share/applications # desktop-entry patch
 	@echo Please see the README file regarding the terminfo entry of st.
 
 uninstall:

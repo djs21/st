@@ -36,7 +36,11 @@ static sixel_color_t const sixel_default_color_table[] = {
 void
 scroll_images(int n) {
 	ImageList *im, *next;
+	#if SCROLLBACK_PATCH || REFLOW_PATCH
 	int top = tisaltscr() ? 0 : term.scr - HISTSIZE;
+	#else
+	int top = 0;
+	#endif // SCROLLBACK_PATCH
 
 	for (im = term.images; im; im = next) {
 		next = im->next;
@@ -96,9 +100,13 @@ set_default_color(sixel_image_t *image)
 		image->palette[n++] = SIXEL_RGB(i * 11, i * 11, i * 11);
 	}
 
+	/* sixels rarely use more than 256 colors and if they do, they use a custom
+	 * palette, so we don't need to initialize these colors */
+	/*
 	for (; n < DECSIXEL_PALETTE_MAX; n++) {
 		image->palette[n] = SIXEL_RGB(255, 255, 255);
 	}
+	*/
 
 	return (0);
 }
@@ -140,6 +148,7 @@ sixel_image_init(
 end:
 	return status;
 }
+
 
 static int
 image_buffer_resize(
@@ -605,11 +614,12 @@ sixel_parser_parse(sixel_state_t *st, const unsigned char *p, size_t len)
 				st->param = 0;
 
 				if (st->nparams > 0) {
-					st->color_index = 1 + st->params[0];  /* offset 1(background color) added */
+					st->color_index = st->params[0];
 					if (st->color_index < 0)
 						st->color_index = 0;
 					else if (st->color_index >= DECSIXEL_PALETTE_MAX)
 						st->color_index = DECSIXEL_PALETTE_MAX - 1;
+					st->color_index++; /* offset by 1 (background) */
 				}
 
 				if (st->nparams > 4) {

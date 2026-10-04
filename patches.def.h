@@ -34,12 +34,12 @@
  * the window to be resized to any pixel size.
  * https://st.suckless.org/patches/anygeometry/
  */
-#define ANYGEOMETRY_PATCH 1
+#define ANYGEOMETRY_PATCH 0
 
 /* This patch allows st to resize to any pixel size rather than snapping to character width/height.
  * https://st.suckless.org/patches/anysize/
  */
-#define ANYSIZE_PATCH 1
+#define ANYSIZE_PATCH 0
 
 /* A simple variant of the anysize patch that only changes the resize hints to allow the window to
  * be resized to any size.
@@ -70,7 +70,7 @@
  * This patch makes bold text rendered simply as bold, leaving the color unaffected.
  * https://st.suckless.org/patches/bold-is-not-bright/
  */
-#define BOLD_IS_NOT_BRIGHT_PATCH 1
+#define BOLD_IS_NOT_BRIGHT_PATCH 0
 
 /* This patch adds custom rendering of lines/blocks/braille characters for gapless alignment.
  * https://st.suckless.org/patches/boxdraw/
@@ -81,7 +81,7 @@
  * This patch makes st set CLIPBOARD on selection.
  * https://st.suckless.org/patches/clipboard/
  */
-#define CLIPBOARD_PATCH 0
+#define CLIPBOARD_PATCH 1
 
 /* This patch allows st to be resized without cutting off text when the terminal window is
  * made larger again. Text does not wrap when the terminal window is made smaller, you may
@@ -127,7 +127,7 @@
 /* Return BS on pressing backspace and DEL on pressing the delete key.
  * https://st.suckless.org/patches/delkey/
  */
-#define DELKEY_PATCH 1
+#define DELKEY_PATCH 0
 
 /* This patch adds the option of disabling bold fonts globally.
  * https://st.suckless.org/patches/disable_bold_italic_fonts/
@@ -219,7 +219,7 @@
  * cursor).
  * https://www.reddit.com/r/suckless/comments/nvee8h/how_to_hide_cursor_in_st_is_there_a_patch_for_it/
  */
-#define HIDE_TERMINAL_CURSOR_PATCH 1
+#define HIDE_TERMINAL_CURSOR_PATCH 0
 
 /* This patch adds a keybinding that lets you invert the current colorscheme of st.
  * This provides a simple way to temporarily switch to a light colorscheme if you use a dark
@@ -249,7 +249,7 @@
  * https://github.com/cog1to/st-ligatures
  * https://st.suckless.org/patches/ligatures/
  */
-#define LIGATURES_PATCH 1
+#define LIGATURES_PATCH 0
 
 /* This patch makes st ignore terminal color attributes by forcing display of the default
  * foreground and background colors only - making for a monochrome look. Idea ref.
@@ -359,7 +359,7 @@
 /* Scroll back through terminal output using Shift+{PageUp, PageDown}.
  * https://st.suckless.org/patches/scrollback/
  */
-#define SCROLLBACK_PATCH 1
+#define SCROLLBACK_PATCH 0
 
 /* Scroll back through terminal output using Shift+MouseWheel.
  * This variant depends on SCROLLBACK_PATCH being enabled.
@@ -380,6 +380,12 @@
  */
 #define SELECTION_COLORS_PATCH 0
 
+/* This patch works with selectioncolors and alpha patches to make selection
+ * background color transparent.
+ * https://st.suckless.org/patches/selectionbg-alpha/
+ */
+#define SELECTIONBG_ALPHA_PATCH 0
+
 /* This is the single drawable buffer patch as outlined in the FAQ to get images
  * in w3m to display. While this patch does not break the alpha patch it images
  * are not shown in w3m if the alpha patch is applied.
@@ -399,7 +405,7 @@
  *
  * https://gist.github.com/saitoha/70e0fdf22e3e8f63ce937c7f7da71809
  */
-#define SIXEL_PATCH 1
+#define SIXEL_PATCH 0
 
 /* This patch allows clients to embed into the st window and is useful if you tend to
  * start X applications from the terminal. For example:
@@ -501,7 +507,7 @@
  * https://github.com/Dreomite/st/commit/e3b821dcb3511d60341dec35ee05a4a0abfef7f2
  * https://www.reddit.com/r/suckless/comments/jt90ai/update_support_for_proper_glyph_rendering_in_st/
  */
-#define WIDE_GLYPHS_PATCH 1
+#define WIDE_GLYPHS_PATCH 0
 
 /* There is a known issue that Google's Variable Fonts (VF) can end up with letter spacing
  * that is too wide in programs that use Xft, for example Inconsolata v3.000.
@@ -528,4 +534,11 @@
  * e.g.: killall -USR1 st
  * Depends on the XRESOURCES_PATCH.
  */
-#define XRESOURCES_RELOAD_PATCH 1
+#define XRESOURCES_RELOAD_PATCH 0
+
+/* This patch adds the ability to configure st via Xdefaults, in addition to Xresources,
+ * like the rxvt-unicode terminal. At startup, st will read and apply the system and user's
+ * local Xdefault files, the XServer's Xresources, and the screen and per-host Xdefaults.
+ * This patch depends on XRESOURCES_PATCH and is compatible with XRESOURCES_RELOAD_PATCH.
+ */
+#define XRESOURCES_XDEFAULTS_PATCH 0
