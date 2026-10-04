@@ -9,6 +9,7 @@
 #include <X11/keysym.h>
 #include <X11/Xft/Xft.h>
 #include <X11/XKBlib.h>
+#include "patches.h"
 
 /* macros */
 #define MIN(a, b)		((a) < (b) ? (a) : (b))

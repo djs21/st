@@ -12,3 +12,4 @@ patches.h
 .beads-credential-key
 .beads/proxieddb/
 *.gate.lock*
+.worktrees/

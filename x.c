@@ -2007,7 +2007,11 @@ run(void)
 		FD_SET(ttyfd, &rfd);
 		FD_SET(xfd, &rfd);
 
+		#if SYNC_PATCH
+		if (XPending(xw.dpy) || ttyread_pending())
+		#else
 		if (XPending(xw.dpy))
+		#endif // SYNC_PATCH
 			timeout = 0;  /* existing events might not set xfd */
 
 		seltv.tv_sec = timeout / 1E3;
@@ -2021,8 +2025,14 @@ run(void)
 		}
 		clock_gettime(CLOCK_MONOTONIC, &now);
 
+		#if SYNC_PATCH
+		int ttyin = FD_ISSET(ttyfd, &rfd) || ttyread_pending();
+		if (ttyin)
+			ttyread();
+		#else
 		if (FD_ISSET(ttyfd, &rfd))
 			ttyread();
+		#endif // SYNC_PATCH
 
 		xev = 0;
 		while (XPending(xw.dpy)) {
@@ -2045,7 +2055,11 @@ run(void)
 		 * maximum latency intervals during `cat huge.txt`, and perfect
 		 * sync with periodic updates from animations/key-repeats/etc.
 		 */
+		#if SYNC_PATCH
+		if (ttyin || xev)
+		#else
 		if (FD_ISSET(ttyfd, &rfd) || xev)
+		#endif // SYNC_PATCH
 		{
 			if (!drawing) {
 				trigger = now;
@@ -2056,6 +2070,20 @@ run(void)
 			if (timeout > 0)
 				continue;  /* we have time, try to find idle */
 		}
+
+		#if SYNC_PATCH
+		if (tinsync(su_timeout)) {
+			/*
+			 * on synchronized-update draw-suspension: don't reset
+			 * drawing so that we draw ASAP once we can (just after
+			 * ESU). it won't be too soon because we already can
+			 * draw and should do so will produce correct display upon
+			 * SU-timeout even without new content.
+			 */
+			timeout = minlatency;
+			continue;
+		}
+		#endif // SYNC_PATCH
 
 		/* idle detected or maxlatency exhausted -> draw */
 		timeout = -1;
